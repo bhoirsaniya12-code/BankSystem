@@ -16,8 +16,10 @@ import service.Bank;
 /**
  * Main web controller for the Bank System.
  *
- * <p><b>Experiment 4 - HttpServlet:</b> Overrides {@code doGet} for viewing
- * pages and {@code doPost} for processing form submissions.</p>
+ * <p>
+ * <b>Experiment 4 - HttpServlet:</b> Overrides {@code doGet} for viewing
+ * pages and {@code doPost} for processing form submissions.
+ * </p>
  *
  * Mapped to URL: <code>/accounts</code>
  */
@@ -90,7 +92,7 @@ public class BankServlet extends HttpServlet {
                     int tenure = Integer.parseInt(request.getParameter("tenure"));
                     newAcc = bank.createFixedDepositAccount(name, deposit, rate, tenure);
                 }
-                
+
                 if (newAcc != null && email != null && !email.trim().isEmpty()) {
                     newAcc.setEmail(email.trim());
                 }
