@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee
+                             https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
+         version="6.0">
+
+    <display-name>NovaBank Web System</display-name>
+
+    <!-- Context Parameters for Database Connection (Experiment 5) -->
+    <context-param>
+        <param-name>dbDriver</param-name>
+        <param-value>com.mysql.cj.jdbc.Driver</param-value>
+    </context-param>
+    <context-param>
+        <param-name>dbUrl</param-name>
+        <param-value>jdbc:mysql://localhost:3306/labdb?useSSL=false&amp;allowPublicKeyRetrieval=true</param-value>
+    </context-param>
+    <context-param>
+        <param-name>dbUser</param-name>
+        <param-value>root</param-value>
+    </context-param>
+    <context-param>
+        <param-name>dbPassword</param-name>
+        <param-value>root</param-value>
+    </context-param>
+
+    <!-- GenericServlet configuration (Experiment 4) -->
+    <servlet>
+        <servlet-name>BankInfoServlet</servlet-name>
+        <servlet-class>web.BankInfoServlet</servlet-class>
+        <!-- Load at startup to initialize early -->
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>BankInfoServlet</servlet-name>
+        <url-pattern>/bank-info</url-pattern>
+    </servlet-mapping>
+
+    <!-- LoginServlet configuration (Experiment 5) -->
+    <servlet>
+        <servlet-name>LoginServlet</servlet-name>
+        <servlet-class>web.LoginServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LoginServlet</servlet-name>
+        <url-pattern>/login</url-pattern>
+    </servlet-mapping>
+
+    <!-- HttpServlet configuration for core bank system (Experiment 4) -->
+    <servlet>
+        <servlet-name>BankServlet</servlet-name>
+        <servlet-class>web.BankServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>BankServlet</servlet-name>
+        <url-pattern>/accounts</url-pattern>
+    </servlet-mapping>
+
+    <!-- Welcome File -->
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
+
+</web-app>
