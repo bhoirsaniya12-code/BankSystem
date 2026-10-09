@@ -48,9 +48,9 @@ public class LoginServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         ServletContext ctx = getServletContext();
-        dbUrl      = ctx.getInitParameter("dbUrl");
-        dbUser     = ctx.getInitParameter("dbUser");
-        dbPassword = ctx.getInitParameter("dbPassword");
+        dbUrl      = System.getenv("DB_URL") != null ? System.getenv("DB_URL") : ctx.getInitParameter("dbUrl");
+        dbUser     = System.getenv("DB_USER") != null ? System.getenv("DB_USER") : ctx.getInitParameter("dbUser");
+        dbPassword = System.getenv("DB_PASSWORD") != null ? System.getenv("DB_PASSWORD") : ctx.getInitParameter("dbPassword");
 
         try {
             // Step 1 of JDBC: load the driver class
