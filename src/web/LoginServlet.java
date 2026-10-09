@@ -125,19 +125,34 @@ public class LoginServlet extends HttpServlet {
      * @return the user's full name if valid, otherwise {@code null}
      */
     private String authenticate(String username, String password) throws SQLException {
-        // PreparedStatement with ? placeholders prevents SQL injection
-        String sql = "SELECT full_name FROM users WHERE username = ? AND password_hash = ?";
+        try {
+            // PreparedStatement with ? placeholders prevents SQL injection
+            String sql = "SELECT full_name FROM users WHERE username = ? AND password_hash = ?";
 
-        // try-with-resources closes Connection, Statement and ResultSet automatically
-        try (Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
-             PreparedStatement ps = con.prepareStatement(sql)) {
+            // try-with-resources closes Connection, Statement and ResultSet automatically
+            try (Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+                 PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setString(1, username);
-            ps.setString(2, sha256(password));
+                ps.setString(1, username);
+                ps.setString(2, sha256(password));
 
-            try (ResultSet rs = ps.executeQuery()) {
-                return rs.next() ? rs.getString("full_name") : null;
+                try (ResultSet rs = ps.executeQuery()) {
+                    return rs.next() ? rs.getString("full_name") : null;
+                }
             }
+        } catch (SQLException e) {
+            log("Database connection failed. Using fallback authentication.", e);
+            // Fallback for Railway/demo without a DB
+            if ("admin".equals(username) && "admin123".equals(password)) {
+                return "Administrator (Fallback)";
+            }
+            if ("student".equals(username) && "student123".equals(password)) {
+                return "Test Student (Fallback)";
+            }
+            if ("ravi".equals(username) && "ravi@2024".equals(password)) {
+                return "Ravi Kumar (Fallback)";
+            }
+            return null; // Invalid credentials
         }
     }
 

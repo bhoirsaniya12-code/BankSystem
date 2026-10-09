@@ -8,6 +8,8 @@ web/WEB-INF/classes/
 
 # Package Files
 *.jar
+!jakarta.servlet-api.jar
+!web/WEB-INF/lib/mysql-connector-j.jar
 *.war
 *.ear
 *.zip
