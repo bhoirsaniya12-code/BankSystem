@@ -55,6 +55,30 @@ public class LoginServlet extends HttpServlet {
         try {
             // Step 1 of JDBC: load the driver class
             Class.forName(ctx.getInitParameter("dbDriver"));
+            
+            // Step 2: Auto-setup database table if it doesn't exist
+            try (Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+                 java.sql.Statement stmt = con.createStatement()) {
+                 
+                stmt.execute("CREATE TABLE IF NOT EXISTS users (" +
+                             "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                             "username VARCHAR(50) NOT NULL UNIQUE, " +
+                             "password_hash CHAR(64) NOT NULL, " +
+                             "full_name VARCHAR(100) NOT NULL, " +
+                             "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)");
+                             
+                try (ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM users")) {
+                    if (rs.next() && rs.getInt(1) == 0) {
+                        stmt.executeUpdate("INSERT INTO users (username, password_hash, full_name) VALUES " +
+                            "('admin', SHA2('admin123', 256), 'Administrator'), " +
+                            "('student', SHA2('student123', 256), 'Test Student'), " +
+                            "('ravi', SHA2('ravi@2024', 256), 'Ravi Kumar')");
+                    }
+                }
+            } catch (SQLException e) {
+                System.out.println("Auto DB setup skipped or failed: " + e.getMessage());
+            }
+            
         } catch (ClassNotFoundException e) {
             throw new ServletException(
                     "JDBC driver not found. Copy mysql-connector-j.jar into "
