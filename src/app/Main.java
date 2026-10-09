@@ -5,9 +5,6 @@ import java.util.List;
 import java.util.Scanner;
 
 import model.Account;
-import model.SavingsAccount;
-import model.CurrentAccount;
-import model.FixedDepositAccount;
 
 import service.Bank;
 
